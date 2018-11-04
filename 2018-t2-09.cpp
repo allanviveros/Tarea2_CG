@@ -2,7 +2,7 @@
 // Departamento de Informatica
 // INF342 Computación Grafica
 // Hubert Hoffmann
-// T1
+// T2
 // Juan Pablo Leon (201473047-2)
 // Allan Viveros (201473056-k)
 // Numero de Grupo: 9
@@ -17,7 +17,7 @@ int main(int argc, char** argv) {
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 	glutInitWindowSize(700, 700);
 	glutInitWindowPosition(0, 0);
-	glutCreateWindow("Tarea 1, Computación Gráfica: Juan Pablo León y Allan Viveros");
+	glutCreateWindow("Tarea 2, Computación Gráfica: Juan Pablo León y Allan Viveros");
 	glutDisplayFunc(mydisplay);
 
 	init();
