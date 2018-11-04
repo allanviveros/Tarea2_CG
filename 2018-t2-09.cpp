@@ -11,14 +11,18 @@
 #include "iostream"
 using namespace std;
 
-float speedMoveRectangle = 0;
-
 void init();
 void mydisplay();
 //Rectangle
-void TimeMoveRectangle(int time);
+float speedMoveRectangle = 0;
+void AnimationRectangle(int time);
 void CreateRectangle();
 void MoveRectangle();
+//Triangle
+float speedRotateRectangle = 0;
+void CreateTriangle();
+void RotateTriangle();
+void AnimationTriangle(int time);
 
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
@@ -28,7 +32,8 @@ int main(int argc, char** argv) {
 	glutCreateWindow("Tarea 2, Computación Gráfica: Juan Pablo León y Allan Viveros");
 	glutDisplayFunc(mydisplay);
 	init();
-	glutTimerFunc(0, TimeMoveRectangle, 10);
+	glutTimerFunc(0, AnimationRectangle, 10);
+	glutTimerFunc(0, AnimationTriangle, 10);
 	glutMainLoop();
 }
 
@@ -53,12 +58,7 @@ void mydisplay(){
 	glEnd();
 
 
-	glColor3f(1.0, 0.0, 0);
-	glBegin(GL_TRIANGLES);
-	glVertex2f(-0.55, 0.0);
-	glVertex2f(-0.2, -0.9);
-	glVertex2f(-0.9, -0.9);
-	glEnd();
+	RotateTriangle();
 
 	glFlush();
 }
@@ -75,12 +75,12 @@ void CreateRectangle() {
 	glEnd();
 }
 
-void TimeMoveRectangle(int time) {
+void AnimationRectangle(int time) {
 	speedMoveRectangle += 0.003;
 	if (speedMoveRectangle > 2) {
 		speedMoveRectangle = -2;
 	}
-	glutTimerFunc(time, TimeMoveRectangle, time);
+	glutTimerFunc(time, AnimationRectangle, time);
 	glutPostRedisplay();
 }
 
@@ -91,4 +91,27 @@ void MoveRectangle() {
 	glPopMatrix();
 }
 
+//Triangle
+void CreateTriangle() {
+	glColor3f(1.0, 0.0, 0);
+	glBegin(GL_TRIANGLES);
+	glVertex2f(-0.55, 0.0);
+	glVertex2f(-0.2, -0.9);
+	glVertex2f(-0.9, -0.9);
+	glEnd();
+}
 
+void AnimationTriangle(int time) {
+	speedRotateRectangle += 1.5;
+	glutTimerFunc(time, AnimationTriangle, time);
+	glutPostRedisplay();
+}
+
+void RotateTriangle() {
+	glPushMatrix();
+	glTranslatef(-0.55, -0.45, 0);
+	glRotatef(speedRotateRectangle, 0, 0, 1);
+	glTranslatef(0.55, 0.45, 0);
+	CreateTriangle();
+	glPopMatrix();
+}
