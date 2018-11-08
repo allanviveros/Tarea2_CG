@@ -23,6 +23,13 @@ float speedRotateRectangle = 0;
 void CreateTriangle();
 void RotateTriangle();
 void AnimationTriangle(int time);
+//Square
+float percentage = 1.0;
+bool increase = FALSE;
+void CreateSquare(float percentage);
+void ResizeSquare();
+void AnimationSquare(int time);
+
 
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
@@ -34,6 +41,7 @@ int main(int argc, char** argv) {
 	init();
 	glutTimerFunc(0, AnimationRectangle, 10);
 	glutTimerFunc(0, AnimationTriangle, 10);
+	glutTimerFunc(0, AnimationSquare, 10);
 	glutMainLoop();
 }
 
@@ -44,19 +52,12 @@ void init() {
 	glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
 }
 
-void mydisplay(){
+void mydisplay() {
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	MoveRectangle();
-	
-	glColor3f(0.0, 1.0, 0.0);
-	glBegin(GL_POLYGON);
-	glVertex2f(0.0, 0.0);
-	glVertex2f(0.9, 0.0);
-	glVertex2f(0.9, -0.9);
-	glVertex2f(0.0, -0.9);
-	glEnd();
 
+	ResizeSquare();
 
 	RotateTriangle();
 
@@ -64,7 +65,6 @@ void mydisplay(){
 }
 
 //Rectangle
-
 void CreateRectangle() {
 	glColor3f(0.0, 0.0, 1.0);
 	glBegin(GL_POLYGON);
@@ -113,5 +113,40 @@ void RotateTriangle() {
 	glRotatef(speedRotateRectangle, 0, 0, 1);
 	glTranslatef(0.55, 0.45, 0);
 	CreateTriangle();
+	glPopMatrix();
+}
+
+//Square
+void CreateSquare(float percentage) {
+	glColor3f(0.0, 1.0, 0.0);
+	glBegin(GL_POLYGON);
+	glVertex2f(0.45 * (1 - percentage), -0.45 * (1 + percentage));
+	glVertex2f(0.45 * (1 + percentage), -0.45 * (1 + percentage));
+	glVertex2f(0.45 * (1 + percentage), -0.45 * (1 - percentage));
+	glVertex2f(0.45 * (1 - percentage), -0.45 * (1 - percentage));
+	glEnd();
+}
+
+void AnimationSquare(int time) {
+	if (increase) {
+		percentage += 0.01;
+		if (percentage >= 1.0) {
+			increase = FALSE;
+		}
+	}
+	else {
+		percentage -= 0.01;
+		if (percentage <= 0.0) {
+			increase = TRUE;
+		}
+	}
+
+	glutTimerFunc(time, AnimationSquare, time);
+	glutPostRedisplay();
+}
+
+void ResizeSquare() {
+	glPushMatrix();
+	CreateSquare(percentage);
 	glPopMatrix();
 }
